@@ -613,7 +613,8 @@ module Authorization
       protected
       def filter_access_permissions # :nodoc:
         unless filter_access_permissions?
-          ancestors[1..-1].reverse.each do |mod|
+          # Patched per this issue - https://github.com/stffn/declarative_authorization/issues/224
+          (ancestors - [self] ).reverse.each do |mod|
             mod.filter_access_permissions if mod.respond_to?(:filter_access_permissions, true)
           end
         end
